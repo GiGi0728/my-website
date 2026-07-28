@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>追星网 - 国内娱乐资讯与明星活动汇总</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script src="data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="hero-shell">
+      <nav class="topbar" aria-label="主导航">
+        <a class="brand" href="#" aria-label="追星网首页">
+          <span class="brand-mark">追</span>
+          <span>追星网</span>
+        </a>
+        <div class="nav-links" aria-label="频道">
+          <a class="active" href="#">首页</a>
+          <a href="#feedGrid">热榜</a>
+          <a href="#scheduleList">活动</a>
+          <a href="#feedGrid">影视</a>
+          <a href="#feedGrid">综艺</a>
+          <a href="#rankList">明星榜</a>
+        </div>
+        <form class="search" role="search">
+          <input id="siteSearch" type="search" placeholder="搜明星、活动、剧综、舞台" aria-label="搜索" />
+          <button type="submit" aria-label="搜索">
+            <i data-lucide="search"></i>
+          </button>
+        </form>
+        <div class="toolbar" aria-label="快捷入口">
+          <button class="icon-btn" type="button" aria-label="消息">
+            <i data-lucide="mail"></i>
+          </button>
+          <button class="icon-btn" type="button" aria-label="收藏">
+            <i data-lucide="star"></i>
+          </button>
+          <button class="icon-btn" type="button" aria-label="历史">
+            <i data-lucide="clock-3"></i>
+          </button>
+          <button class="login-btn" type="button">登录</button>
+          <button class="publish-btn" type="button" aria-label="发布">
+            <i data-lucide="upload"></i>
+          </button>
+        </div>
+      </nav>
+
+      <section class="hero-banner" aria-label="追星网焦点横幅">
+        <div class="hero-copy">
+          <p>国内娱乐实时汇总</p>
+          <h1>追星网</h1>
+          <span>明星资讯 · 活动行程 · 影视综艺 · 舞台现场</span>
+        </div>
+        <div class="hero-card">
+          <span class="live-dot"></span>
+          <strong id="heroLiveTitle">内容更新中</strong>
+          <small id="heroLiveText">接入新浪娱乐、豆瓣、B站、1905 等公开信息</small>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="source-strip" aria-label="数据来源">
+        <div>
+          <strong>内容源</strong>
+          <span id="sourceSummary">正在载入娱乐信息</span>
+        </div>
+        <time id="updatedAt">--</time>
+      </section>
+
+      <section class="support-studio" aria-label="应援物料生成器">
+        <div class="studio-copy">
+          <span>AI 应援工坊</span>
+          <h2>上传艺人图，生成应援横幅、物料和大旗</h2>
+          <p>选择物料类型、填写口号与配色，生成结果可预览并下载。</p>
+        </div>
+
+        <form class="studio-form" id="materialForm">
+          <label class="upload-box" for="artistImage">
+            <input id="artistImage" name="artistImage" type="file" accept="image/*" />
+            <img id="artistPreview" alt="" />
+            <span id="uploadHint"><i data-lucide="image-plus"></i> 上传艺人图片</span>
+          </label>
+
+          <div class="studio-fields">
+            <label>
+              <span>艺人名</span>
+              <input id="artistName" name="artistName" type="text" placeholder="例如：某某" required />
+            </label>
+            <label>
+              <span>应援口号</span>
+              <input id="slogan" name="slogan" type="text" placeholder="例如：星光不负热爱" required />
+            </label>
+            <label>
+              <span>物料类型</span>
+              <select id="materialType" name="materialType">
+                <option value="support_banner">应援横幅</option>
+                <option value="support_pack">应援物料套装</option>
+                <option value="support_flag">应援大旗</option>
+                <option value="light_board">灯牌手幅</option>
+              </select>
+            </label>
+            <label>
+              <span>视觉风格</span>
+              <select id="visualStyle" name="visualStyle">
+                <option value="clean idol concert design">清爽演唱会风</option>
+                <option value="dreamy starry gradient">梦幻星河风</option>
+                <option value="bold street pop poster">高饱和潮流风</option>
+                <option value="elegant magazine editorial">高级杂志风</option>
+              </select>
+            </label>
+            <label>
+              <span>生成模式</span>
+              <select id="generationMode" name="generationMode">
+                <option value="fast_precise">快速精准：真人图+准确文字</option>
+                <option value="ai_background">AI 背景：慢一些，文字仍由网页排版</option>
+              </select>
+            </label>
+            <label>
+              <span>主色</span>
+              <input id="mainColor" name="mainColor" type="color" value="#ff6b91" />
+            </label>
+            <label>
+              <span>尺寸</span>
+              <select id="materialSize" name="materialSize">
+                <option value="1024x1024">方形物料</option>
+                <option value="1536x1024">横版 3:2</option>
+                <option value="1024x1536">竖版海报</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="studio-actions">
+            <button class="generate-btn" type="submit">
+              <i data-lucide="wand-sparkles"></i>
+              生成应援物料
+            </button>
+            <p id="generationStatus">默认快速生成，人物使用上传原图，文字不会错别字。</p>
+          </div>
+        </form>
+
+        <div class="studio-result" id="materialResult" aria-live="polite">
+          <div class="result-empty">
+            <i data-lucide="sparkles"></i>
+            <span>生成后会显示在这里</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="channel-panel" aria-label="频道分类">
+        <div class="pulse-tabs">
+          <button class="round-tab active" type="button" data-filter="all">
+            <i data-lucide="sparkles"></i>
+            <span>动态</span>
+          </button>
+          <button class="round-tab hot" type="button" data-filter="热榜">
+            <i data-lucide="flame"></i>
+            <span>热门</span>
+          </button>
+        </div>
+
+        <div class="chip-grid" aria-label="内容频道">
+          <button class="chip" type="button" data-filter="影视">影视</button>
+          <button class="chip" type="button" data-filter="综艺">综艺</button>
+          <button class="chip" type="button" data-filter="音乐">音乐</button>
+          <button class="chip" type="button" data-filter="舞台">舞台</button>
+          <button class="chip" type="button" data-filter="红毯">红毯</button>
+          <button class="chip" type="button" data-filter="直播">直播</button>
+          <button class="chip" type="button" data-filter="品牌">品牌</button>
+          <button class="chip" type="button" data-filter="活动">活动</button>
+          <button class="chip" type="button" data-filter="电影">电影</button>
+          <button class="chip" type="button" data-filter="榜单">榜单</button>
+          <button class="chip" type="button" data-filter="粉丝">粉丝应援</button>
+          <button class="chip" type="button" data-filter="票务">票务</button>
+          <button class="chip" type="button" data-filter="资讯">资讯</button>
+          <button class="chip" type="button" data-filter="剧集">剧集</button>
+          <button class="chip more" type="button" data-filter="all">更多</button>
+        </div>
+
+        <div class="quick-links">
+          <a href="#feedGrid"><i data-lucide="newspaper"></i>资讯</a>
+          <a href="#scheduleList"><i data-lucide="flag"></i>活动</a>
+          <a href="#rankList"><i data-lucide="messages-square"></i>热议</a>
+          <a href="#feedGrid"><i data-lucide="video"></i>直播</a>
+          <a href="#feedGrid"><i data-lucide="music-2"></i>音乐</a>
+        </div>
+      </section>
+
+      <section class="content-layout" aria-label="首页内容">
+        <section class="featured">
+          <article class="spotlight" id="spotlight">
+            <img id="spotlightImg" src="" alt="" />
+            <div class="spotlight-overlay">
+              <p id="spotlightTag">焦点</p>
+              <h2 id="spotlightTitle">正在载入焦点内容</h2>
+              <a id="spotlightSource" class="article-source" href="#" target="_blank" rel="noreferrer">查看来源</a>
+              <div class="spotlight-controls" aria-label="轮播控制">
+                <button type="button" id="prevSpotlight" aria-label="上一条">
+                  <i data-lucide="chevron-left"></i>
+                </button>
+                <button type="button" id="nextSpotlight" aria-label="下一条">
+                  <i data-lucide="chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <div class="card-grid" id="feedGrid" aria-live="polite"></div>
+        </section>
+
+        <aside class="side-column" aria-label="明星活动汇总">
+          <div class="section-head">
+            <h2>近期活动</h2>
+            <button class="text-icon" type="button" id="refreshSchedule" aria-label="刷新活动">
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+          <ol class="schedule-list" id="scheduleList"></ol>
+
+          <div class="rank-panel">
+            <div class="section-head">
+              <h2>明星热榜</h2>
+              <span>公开源整理</span>
+            </div>
+            <div id="rankList"></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <aside class="float-tools" aria-label="页面工具">
+      <button type="button" id="shuffleBtn" aria-label="换一换">
+        <i data-lucide="shuffle"></i>
+        <span>换一换</span>
+      </button>
+      <button type="button" aria-label="播放">
+        <i data-lucide="circle-play"></i>
+      </button>
+      <button type="button" id="topBtn" aria-label="返回顶部">
+        <i data-lucide="arrow-up"></i>
+      </button>
+    </aside>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
